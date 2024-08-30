@@ -162,7 +162,7 @@ def pendelum_dataset(samples,
     return out1, out2, out3, out4
 
 
-out1, out2, out3, out4 =pendelum_dataset(50,
+out1, out2, out3, out4 =pendelum_dataset(5,
                 1.27,
                 128,
                 data = [1,1,1,1,1,1,1,1,9.81],
