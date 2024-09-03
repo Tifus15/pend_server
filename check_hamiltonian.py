@@ -1,9 +1,10 @@
 import torch
 
-x1 = torch.load("traj_1dof.pt")
-x2 = torch.load("traj_2dof.pt")
-x3 = torch.load("traj_3dof.pt")
-x4 = torch.load("traj_4dof.pt")
+x1 = torch.load("pend_1.pt")
+x2 = torch.load("pend_2.pt")
+x3 = torch.load("pend_3.pt")
+x4 = torch.load("pend_4.pt")
+print(x1.shape)
 
 H1 = x1[:,:,:,-1].squeeze()
 H2 = x2[:,:,:,-1].squeeze()

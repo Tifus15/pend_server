@@ -4,8 +4,8 @@ sob:
   - True
 sob_a: 
   - 1.0
-  - 1.0
-  - 1.0
+  - 0.15
+  - 0.3
 a : 0.01
 opti : adamW
 reg : none
@@ -13,7 +13,7 @@ loss: Huber
 acts : 
   - tanh
   - 
-epochs: 50
+epochs: 300
 modelsize : 256
 batchsize : 32
 timesize : 32
@@ -22,4 +22,6 @@ split: 0.9
 device: cpu
 single: False
 noloops: True 
-samples: 50
+samples: 20
+max_sim_time: 3600 # 3 days
+bias: False

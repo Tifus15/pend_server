@@ -364,7 +364,9 @@ class rollout_GNN_GRU(nn.Module):
         houtput[0,:]=hi
         H_l = torch.split(houtput[0,:],1,dim=0)
         dHdx = torch.autograd.grad(H_l,x0,retain_graph=True, create_graph=True)[0] 
-        dqdp_s = torch.split(dHdx,2,dim=-1)
+       
+        dqdp_s = torch.split(dHdx,1,dim=-1)
+      
         dx_pred = torch.cat((dqdp_s[1],-dqdp_s[0]),dim=-1)
         doutput[0,:,:] = dx_pred
         #print("xii: {}".format(xii.shape))
@@ -382,7 +384,7 @@ class rollout_GNN_GRU(nn.Module):
             houtput[i-1,:]=hi
             H_l = torch.split(houtput[i-1,:],1,dim=0)
             dHdx = torch.autograd.grad(H_l,temp,retain_graph=True, create_graph=True)[0] 
-            dqdp_s = torch.split(dHdx,2,dim=-1)
+            dqdp_s = torch.split(dHdx,1,dim=-1)
             dx_pred = torch.cat((dqdp_s[1],-dqdp_s[0]),dim=-1)
             
             
@@ -399,7 +401,7 @@ class rollout_GNN_GRU(nn.Module):
         houtput[-1,:] = hi
         H_l = torch.split(houtput[-1,:],1,dim=0)
         dHdx = torch.autograd.grad(H_l,temp,retain_graph=True, create_graph=True)[0] 
-        dqdp_s = torch.split(dHdx,2,dim=-1)
+        dqdp_s = torch.split(dHdx,1,dim=-1)
         dx_pred = torch.cat((dqdp_s[1],-dqdp_s[0]),dim=-1)
         doutput[-1,:,:] = dx_pred
         return  output, doutput, houtput

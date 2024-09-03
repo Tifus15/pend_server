@@ -352,3 +352,30 @@ def create_pend4dof_graph_snapshots(xsnaps,hsnaps,src,dst):
         g.ndata["h"] =  tempH
         graphs.append(g)
     return graphs
+
+
+def RKroll_for_learning(model,x0,t):
+    def evaluate_model(model,x):
+        h_pred = model(x)
+        H_l = torch.split(h_pred,1,dim=1)
+        dHdx = torch.autograd.grad(H_l,x,retain_graph=True, create_graph=True)[0] 
+        dqdp_s = torch.split(dHdx,3,dim=-1)
+        dx_pred = torch.cat((dqdp_s[1],-dqdp_s[0]),dim=-1)
+        return dx_pred
+    out_l = []
+    out_dl= []
+    out_l.append(x0.unsqueeze(0))
+    out_dl.append(evaluate_model(model,x0).unsqueeze(0))
+    #print(out_l[0].shape)
+    for i in range(1,len(t)):
+        dt=t[i]-t[i-1]
+        K1 = evaluate_model(model,out_l[i-1].squeeze())
+        K2 = evaluate_model(model,out_l[i-1].squeeze()+dt*K1/2)
+        K3 = evaluate_model(model,out_l[i-1].squeeze()+dt*K2/2)
+        K4 = evaluate_model(model,out_l[i-1].squeeze()+dt*K3)
+        rk4=out_l[i-1].squeeze()+dt*(K1+2*K2+2*K3+K4)/6
+        out_l.append(rk4.unsqueeze(0))
+        out_dl.append(K1.unsqueeze(0))
+        #print(out_l[i].shape)
+    
+    return torch.cat((out_l),dim=0), torch.cat((out_dl),dim=0)

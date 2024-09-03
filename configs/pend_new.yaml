@@ -24,8 +24,7 @@ train_break: -1
 test_break: -1
 
 epochs: 10000
-sim_type: dat_div
 
-max_sim_time: 259200 # 3 days
+max_sim_time: 3600 # 3 days
 wandb: True
 
